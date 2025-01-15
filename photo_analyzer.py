@@ -41,8 +41,7 @@ def check_exposure(image, tol=0.3):
     histogram_bins_borders = [0, 128, 255]
 
     mean_values = image.mean(axis=2).flatten()
-    counts, _ = np.histogram(mean_values, histogram_bins_borders)
-    dark_pixels, bright_pixels = counts
+    (dark_pixels, bright_pixels), _ = np.histogram(mean_values, histogram_bins_borders)
     half_pixels = (dark_pixels + bright_pixels) / 2
 
     if bright_pixels > half_pixels + half_pixels * tol:
