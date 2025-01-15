@@ -25,14 +25,14 @@ parser.add_argument(
     "-t",
     "--tolerance",
     type=float,
-    default=0.3,
-    help="Set the tolerance level for correct exposure detection. Default value is 0.3.",
+    default=0.4,
+    help="Set the tolerance level for correct exposure detection. Default value is 0.4.",
 )
 args = parser.parse_args()
 
 DIR_PATH = args.photo_directory
 ENABLE_OVERWRITE = args.o
-TOLERANCE = args.t
+TOLERANCE = args.tolerance
 
 class AnalyzePhotoException(Exception):
     pass
