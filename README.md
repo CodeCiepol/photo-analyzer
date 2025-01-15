@@ -20,6 +20,11 @@ Ensure you have Python 3.7 or later installed along with the following libraries
 - `NumPy`
 
 ## How to use
-```
+```bash
 python photo_analyzer.py /path/to/photos
 ```
+
+```bash
+python photo_analyzer.py ./photos/directory -t 0.2 -o
+```
+Sets the tolerance to 0.2 and allows overwriting the CSV file.
