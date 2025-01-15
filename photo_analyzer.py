@@ -15,9 +15,24 @@ parser.add_argument(
     help="Path to the directory containing the images to analyze.",
 )
 
+parser.add_argument(
+    "-o",
+    help="Allows overwriting the output CSV file if it already exists.",
+    action="store_true",
+)
+
+parser.add_argument(
+    "-t",
+    "--tolerance",
+    type=float,
+    default=0.3,
+    help="Set the tolerance level for correct exposure detection. Default value is 0.3.",
+)
 args = parser.parse_args()
 
 DIR_PATH = args.photo_directory
+ENABLE_OVERWRITE = args.o
+TOLERANCE = args.t
 
 class AnalyzePhotoException(Exception):
     pass
@@ -36,7 +51,7 @@ def get_image_from_filename(filename):
     return cv2.imread(image_path)
 
 
-def check_exposure(image, tol=0.3):
+def check_exposure(image, tol=TOLERANCE):
     histogram_bins_borders = [0, 128, 255]
 
     mean_values = image.mean(axis=2).flatten()
@@ -68,7 +83,7 @@ def create_row(*args):
     return ",".join(map(str, args))
 
 
-def write_to_csv(rows_array, filename="results.csv", overwrite=True):
+def write_to_csv(rows_array, filename="results.csv", overwrite=ENABLE_OVERWRITE):
     header = "Exposure,Mean Color Hex,Resolution,Filename"
     mode = "w" if overwrite else "a"
 
@@ -77,7 +92,7 @@ def write_to_csv(rows_array, filename="results.csv", overwrite=True):
 
     with open(filename, mode) as file:
         if overwrite:
-            file.write (f"{header}\n")
+            file.write(f"{header}\n")
         file.write("\n".join(map(str, rows_array)))
         file.write("\n")
 
@@ -94,5 +109,4 @@ for image_filename in image_filenames:
         image_filename,
     )
     rows_array.append(new_row)
-
 write_to_csv(rows_array)
