@@ -7,6 +7,7 @@ DIR_PATH = "./photos"
 class AnalyzePhotoException(Exception):
     pass
 
+
 def get_filenames_from_dir(path=DIR_PATH):
     files = os.listdir(path)
     image_files = [f for f in files if f.endswith((".JPG", ".jpeg", ".png"))]
