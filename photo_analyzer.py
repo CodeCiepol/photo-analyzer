@@ -19,7 +19,6 @@ args = parser.parse_args()
 
 DIR_PATH = args.photo_directory
 
-
 class AnalyzePhotoException(Exception):
     pass
 
@@ -70,12 +69,15 @@ def create_row(*args):
 
 
 def write_to_csv(rows_array, filename="results.csv", overwrite=True):
+    header = "Exposure,Mean Color Hex,Resolution,Filename"
     mode = "w" if overwrite else "a"
 
     if not filename.endswith(".csv"):
         raise Exception("File should be save as csv file")
 
     with open(filename, mode) as file:
+        if overwrite:
+            file.write (f"{header}\n")
         file.write("\n".join(map(str, rows_array)))
         file.write("\n")
 
