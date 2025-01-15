@@ -1,8 +1,24 @@
 import numpy as np
 import cv2
 import os
+import argparse
 
-DIR_PATH = "./photos"
+parser = argparse.ArgumentParser(
+    prog="photo_analyzer",
+    description="A program to analyze JPEG and PNG images. It detects exposure (overexposed/underexposed), \
+    calculates the average color in hexadecimal format, extracts image resolution, and stores these details in a CSV file.",
+)
+
+parser.add_argument(
+    "photo_directory",
+    type=str,
+    help="Path to the directory containing the images to analyze.",
+)
+
+args = parser.parse_args()
+
+DIR_PATH = args.photo_directory
+
 
 class AnalyzePhotoException(Exception):
     pass
@@ -50,22 +66,32 @@ def get_resolution(image):
     return f"{height}x{width}"
 
 
-def write_to_csv(*args, filename="results.csv", overwrite=False):
+def create_row(*args):
+    return ",".join(map(str, args))
+
+
+def write_to_csv(rows_array, filename="results.csv", overwrite=True):
     mode = "w" if overwrite else "a"
+
     if not filename.endswith(".csv"):
-        raise AnalyzePhotoException("File should be save as csv file")
+        raise Exception("File should be save as csv file")
 
     with open(filename, mode) as file:
-        row = ",".join(map(str, args))
-        file.write(row + "\n")
+        file.write("\n".join(map(str, rows_array)))
+        file.write("\n")
 
 
 image_filenames = get_filenames_from_dir()
+rows_array = []
+
 for image_filename in image_filenames:
     image = get_image_from_filename(image_filename)
-    write_to_csv(
+    new_row = create_row(
         check_exposure(image),
         get_color_hex_mean(image),
         get_resolution(image),
         image_filename,
     )
+    rows_array.append(new_row)
+
+write_to_csv(rows_array)
