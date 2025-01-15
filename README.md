@@ -18,3 +18,8 @@ The tool is built using the `OpenCV` and `NumPy` libraries, offering efficient a
 Ensure you have Python 3.7 or later installed along with the following libraries:
 - `OpenCV`
 - `NumPy`
+
+## How to use
+```
+python photo_analyzer.py /path/to/photos
+```
